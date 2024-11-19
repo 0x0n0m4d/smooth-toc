@@ -1,6 +1,6 @@
 import { Box, BoxProps } from '@kuma-ui/core';
 
-interface Props extends BoxProps { }
+interface Props extends BoxProps {}
 
 export const Container = ({ children, ...boxProps }: Props) => {
   return (
