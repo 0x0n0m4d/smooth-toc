@@ -6,7 +6,7 @@ utilities,
 theme;
 
 @import 'modern-normalize' layer(reset);
-import '/.tokens.css';
+@import '/.tokens.css';
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -19,4 +19,14 @@ import '/.tokens.css';
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  width: 100vw;
+  min-height: 100vh;
 }
