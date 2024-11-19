@@ -1,4 +1,4 @@
-import { Box } from '@kuma-ui/core';
+import { Box, BoxProps } from '@kuma-ui/core';
 
 interface Props extends BoxProps {}
 

@@ -19,24 +19,22 @@ export const MarkdownOutlineView = () => {
         <Box
           position="absolute"
           top={0}
-          left="0.75em"
+          left="0.75rem"
           bottom={0}
           width="1px"
           backgroundColor="var(--color-muted)"
         />
-        <MarkdownOutlineActiveSectionHighlight />
+        <MarkdownOutlineActiveSectionHighlight sections={sections} />
         <Box as="ul" role="list" m={0} pl="1.5rem" listStyle="none">
           {sections &&
-            sections.map(heading => {
-              return (
-                <MarkdownOutlineItem
-                  {...heading}
-                  key={heading.id}
-                  level={heading.level - minimumLevel}
-                  active={heading.isVisible}
-                />
-              );
-            })}
+            sections.map(heading => (
+              <MarkdownOutlineItem
+                {...heading}
+                key={heading.id}
+                level={heading.level - minimumLevel}
+                active={heading.isVisible}
+              />
+            ))}
         </Box>
       </Box>
     </Box>

@@ -6,7 +6,7 @@ import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remark2rehype from 'remark-rehype';
 import { unified } from 'unified';
-import { createRehypeHeading } from './components/heading';
+import { createRehypeHeading } from '@/components/heading';
 
 const rehypeReactComponents: Partial<JSXComponents> = {
   h1: createRehypeHeading(1),
@@ -17,20 +17,26 @@ const rehypeReactComponents: Partial<JSXComponents> = {
   h6: createRehypeHeading(6)
 };
 
-export class MarkdowRenderer {
-  processor: ReturnType<typeof this.createProcessor> | null = null;
+export interface BuiltInPluginOptions {
+  rehypeSlug: boolean;
+  rehypeMetadataSection: boolean;
+}
+
+export class MarkdownRenderer {
+  processor: Awaited<ReturnType<typeof this.createProcessor>> | null = null;
+
   createProcessor() {
     const remarkParser = unified()
       .use(remarkParse)
       .use(remarkGfm)
       .use(frontmatter);
-    const rehypeRemark = remarkParser()
+    const rehypedRemark = remarkParser()
       .use(remark2rehype, {
         allowDangerousHtml: true
       })
       .use(rehypeSlug);
-    const renderer = rehypeRemark.use(rehype2react, {
-      Fragment: jsxRuntime.Fragment,
+    const renderer = rehypedRemark.use(rehype2react, {
+      Fragment: jsxRuntime.Fragment as any,
       jsx: jsxRuntime.jsx as any,
       jsxs: jsxRuntime.jsxs as any,
       components: rehypeReactComponents

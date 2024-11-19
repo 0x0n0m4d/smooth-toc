@@ -18,7 +18,7 @@ export const mdastExtractHeadings = (
   slugs.reset();
   const headings: TOCHeading[] = [];
 
-  visit(mdast, 'heading', (node, _pos, _parent) => {
+  visit(mdast, 'heading', function (node, _position, _parent) {
     const value = toString(node, { includeImageAlt: false });
     const id =
       node.data &&

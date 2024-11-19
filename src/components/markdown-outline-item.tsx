@@ -18,6 +18,7 @@ export const MarkdownOutlineItem = (props: Props) => {
     <Box
       ref={refItem}
       as="li"
+      data-id={id}
       className="outline-item"
       lineHeight="1.5rem"
       paddingTop="0.25rem"

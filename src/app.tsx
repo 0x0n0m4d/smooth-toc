@@ -1,9 +1,9 @@
-import '@/app.css';
+import './app.css';
 import { Box, HStack } from '@kuma-ui/core';
+import { MarkdownView } from '@/components/markdown-view';
 import { Container } from './atoms/container';
 import { MainContent } from './components/main-content';
 import { MarkdownOutlineView } from './components/markdown-outline-view';
-import { MarkdowView } from './components/markdown-view';
 import { PageTitle } from './components/page-title';
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
         <PageTitle />
         <HStack gap={[0, 0, 0, '1em', '2em']}>
           <Box flexGrow={1} minWidth={0}>
-            <MarkdowView />
+            <MarkdownView />
           </Box>
           <Box
             display={['none', 'none', 'block', 'block']}
