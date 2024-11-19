@@ -1,6 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-type Props = React.DetailedHTMLProps<React.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>
+type Props = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLHeadingElement>,
+  HTMLHeadingElement
+>;
 
 export const createRehypeHeading = (level: number) => {
   const RehypeHeading = (props: Props) => {
@@ -18,14 +21,14 @@ export const createRehypeHeading = (level: number) => {
 
     useEffect(() => {
       if (id) registerHeading(id, refHeading);
-    }, [id, registerHeading])
+    }, [id, registerHeading]);
 
     return (
       <HeadingTag ref={refHeading} id={id}>
         {children}
       </HeadingTag>
-    )
-  }
+    );
+  };
 
-  return (props: Props) => <RehypeHeading {...props} />
-}
+  return (props: Props) => <RehypeHeading {...props} />;
+};
