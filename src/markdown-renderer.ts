@@ -1,11 +1,21 @@
 import * as jsxRuntime from 'react/jsx-runtime';
-import rehype2react from 'rehype-react';
-import rehypeSlug from 'rehype-slug';
+import rehype2react, { Components as JSXComponents } from 'rehype-react';
+// import rehypeSlug from 'rehype-slug';
 import frontmatter from 'remark-frontmatter';
 import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remark2rehype from 'remark-rehype';
 import { unified } from 'unified';
+import { createRehypeHeading } from './components/heading';
+
+const rehypeReactComponents: Partial<JSXComponents> = {
+  h1: createRehypeHeading(1),
+  h2: createRehypeHeading(2),
+  h3: createRehypeHeading(3),
+  h4: createRehypeHeading(4),
+  h5: createRehypeHeading(5),
+  h6: createRehypeHeading(6),
+}
 
 export class MarkdowRenderer {
   processor: ReturnType<typeof this.createProcessor> | null = null;
@@ -20,7 +30,8 @@ export class MarkdowRenderer {
     const renderer = rehypeRemark.use(rehype2react, {
       Fragment: jsxRuntime.Fragment,
       jsx: jsxRuntime.jsx as any,
-      jsxs: jsxRuntime.jsxs as any
+      jsxs: jsxRuntime.jsxs as any,
+      components: rehypeReactComponents
     });
 
     this.processor = renderer;
