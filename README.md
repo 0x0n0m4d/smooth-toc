@@ -1,6 +1,6 @@
 # Smoothly animated table of contents
 
-[!thumb](images/thumb.png)
+![thumb](images/thumb.png)
 
 This is a demo project of a smoothly animated table of contents. It is a simple web app rendering Markdown content with a table of contents that smoothly highlights currently active headings.
 
