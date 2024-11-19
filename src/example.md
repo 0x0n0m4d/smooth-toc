@@ -1,151 +1,157 @@
----
-title: How to use PouchDB on React Native >= 0.73
----
+An h1 header
+============
 
-Hi, it's [Takuya](https://x.com/inkdrop_app) here.
+Paragraphs are separated by a blank line.
 
-I've been updating the mobile version of [Inkdrop](https://www.inkdrop.app/), which is built with React Native.
-It is a simple Markdown note-taking app, which supports syncing notes with the server and offer an offline-first viewing and editing experience.
-To accomplish this, I've been using [PouchDB](https://pouchdb.com/), the JavaScript-based database that can sync with [Apache CouchDB](https://couchdb.apache.org/).
+2nd paragraph. *Italic*, **bold**, and `monospace`. Itemized lists
+look like:
 
-The PouchDB community was struggling to get it to work on React Native smoothly since it doesn't provide NodeJS-compatible APIs like encoding/decoding base64 or the `crypto` module out of the box.
-In 2022, I shared [how to use PouchDB on React Native in this blog post](https://dev.to/craftzdog/a-performant-way-to-use-pouchdb7-on-react-native-in-2022-24ej).
-The technique was adequately performant by using a JSI-based SQLite driver, and polyfilling the missing modules with the native implementations respectively.
+  * this one
+  * that one
+  * the other one
 
-Since then, the circumstances around the React Native ecosystem has been sifnificantly changed.
-This article is an updated version of how to use PouchDB on the latest React Native.
+Note that --- not considering the asterisk --- the actual text
+content starts at 4-columns in.
 
-## Mature JSI-based libraries and the NULL char problem solved
+> Block quotes are
+> written like so.
+>
+> They can span multiple paragraphs,
+> if you like.
 
-There are now JSI-based libraries that are better designed and more performant, for example:
+Use 3 dashes for an em-dash. Use 2 dashes for ranges (ex., "it's all
+in chapters 12--14"). Three dots ... will be converted to an ellipsis.
+Unicode is supported. ☺
 
-- [op-sqlite](https://github.com/OP-Engineering/op-sqlite): Fastest SQLite library for react-native by [@ospfranco](https://github.com/ospfranco)
-  - It is approximately 8~9x faster than [react-native-quick-sqlite](https://github.com/margelo/react-native-quick-sqlite), especially on Android.
-- [react-native-quick-crypto](https://github.com/margelo/react-native-quick-crypto): ⚡️ A fast implementation of Node's `crypto` module written in C/C++ JSI
-  - It internally uses my `@craftzdog/react-native-buffer` module, which improves encoding/decoding base64 performance.
 
-React Native also introduced the new architecture: TurboModules and Fabric, which themselves leverage JSI to improve the communication performance between the native and JS layers.
-It appears that a recent RN update, though I'm not use which commit, has solved [the `\u0000` string termination](https://github.com/facebook/react-native/issues/12731)! It means that you no longer need [a hack escaping `\u0000` chars](https://github.com/craftzdog/pouchdb-react-native/commit/228f68220fe31236f6630b71c030eef29ae6e7a8). Yay!
 
-With these new libraries and fundamental improvements, you can use PouchDB much more smoothly and straightforwardly.
+An h2 header
+------------
 
-## Introducing pouchdb-adapter-react-native-sqlite@4
+Here's a numbered list:
 
-Previsouly, I made [pouchdb-adapter-react-native-sqlite](https://github.com/craftzdog/pouchdb-adapter-react-native-sqlite) to let PouchDB use SQLite on React Native.
-I'm excited to announce v4, which now uses [op-sqlite](https://github.com/OP-Engineering/op-sqlite).
-This time, I managed to make it directly call SQLite APIs and to get rid of the websql layer.
+ 1. first item
+ 2. second item
+ 3. third item
 
-Thanks to the NULL termination issue gone, attachment support is back available now.
+Note again how the actual text starts at 4 columns in (4 characters
+from the left side). Here's a code sample:
 
-You can try an example project for a quick hands-on experience.
+    # Let me re-iterate ...
+    for i in 1 .. 10 { do-something(i) }
 
-https://github.com/craftzdog/pouchdb-adapter-react-native-sqlite/tree/master/example
+As you probably guessed, indented 4 spaces. By the way, instead of
+indenting the block, you can use delimited blocks, if you like:
 
-## How to use
+~~~
+define foobar() {
+    print "Welcome to flavor country!";
+}
+~~~
 
-Setting up the adapter is pretty easy in v4.
+(which makes copying & pasting easier). You can optionally mark the
+delimited block for Pandoc to syntax highlight it:
 
-### Install libraries
+~~~python
+import time
+# Quick, count to ten!
+for i in range(10):
+    # (but not *too* quick)
+    time.sleep(0.5)
+    print i
+~~~
 
-```sh
-yarn add @op-engineering/op-sqlite react-native-quick-crypto @craftzdog/react-native-buffer
-npx pod-install
-```
 
-### Polyfill NodeJS APIs
 
-Create a `shim.ts` file like so:
+### An h3 header ###
 
-```ts
-import { install } from 'react-native-quick-crypto'
+Now a nested list:
 
-install()
-```
+ 1. First, get these ingredients:
 
-Configure babel to use the shim modules. First, you need to install `babel-plugin-module-resolver`.
+      * carrots
+      * celery
+      * lentils
 
-```sh
-yarn add --dev babel-plugin-module-resolver
-```
+ 2. Boil some water.
 
-Then, in your `babel.config.js`, add the plugin to swap the `crypto`, `stream` and `buffer` dependencies:
+ 3. Dump everything in the pot and follow
+    this algorithm:
 
-```js
-    plugins: [
-      [
-        'module-resolver',
-        {
-          extensions: ['.tsx', '.ts', '.js', '.json'],
-          alias: {
-            crypto: 'react-native-quick-crypto',
-            stream: 'readable-stream',
-            buffer: '@craftzdog/react-native-buffer',
-          },
-        },
-      ],
-    ],
-```
+        find wooden spoon
+        uncover pot
+        stir
+        cover pot
+        balance wooden spoon precariously on pot handle
+        wait 10 minutes
+        goto first step (or shut off burner when done)
 
-Then restart your bundler using `yarn start --reset-cache`.
+    Do not bump wooden spoon or it will fall.
 
-### Install PouchDB and adapter
+Notice again how text always lines up on 4-space indents (including
+that last line which continues item 3 above).
 
-Now it's ready to use PouchDB!
+Here's a link to [a website](http://foo.bar), to a [local
+doc](local-doc.html), and to a [section heading in the current
+doc](#an-h2-header). Here's a footnote [^1].
 
-```sh
-yarn add pouchdb-core pouchdb-mapreduce pouchdb-replication pouchdb-adapter-http pouchdb-adapter-react-native-sqlite
-```
+[^1]: Footnote text goes here.
 
-Create `pouchdb.ts`:
+Tables can look like this:
 
-```ts
-import HttpPouch from 'pouchdb-adapter-http'
-import sqliteAdapter from 'pouchdb-adapter-react-native-sqlite'
-import PouchDB from 'pouchdb-core'
-import mapreduce from 'pouchdb-mapreduce'
-import replication from 'pouchdb-replication'
+size  material      color
+----  ------------  ------------
+9     leather       brown
+10    hemp canvas   natural
+11    glass         transparent
 
-export default PouchDB.plugin(HttpPouch)
-  .plugin(replication)
-  .plugin(mapreduce)
-  .plugin(sqliteAdapter)
-```
+Table: Shoes, their sizes, and what they're made of
 
-### How to use PouchDB
+(The above is the caption for the table.) Pandoc also supports
+multi-line tables:
 
-```ts
-import PouchDB from './pouchdb'
+--------  -----------------------
+keyword   text
+--------  -----------------------
+red       Sunsets, apples, and
+          other red or reddish
+          things.
 
-const pouch = new PouchDB('mydb', {
-  adapter: 'react-native-sqlite'
-})
-```
+green     Leaves, grass, frogs
+          and other things it's
+          not easy being.
+--------  -----------------------
 
-That's it!
-Hope you find it useful and helpful.
+A horizontal rule follows.
 
-## Troubleshootings
+***
 
-### Fails to install crypto shim with `install()` on launch
+Here's a definition list:
 
-You amy get the following error when new arch is enabled:
+apples
+  : Good for making applesauce.
+oranges
+  : Citrus!
+tomatoes
+  : There's no "e" in tomatoe.
 
-```
- (NOBRIDGE) ERROR  Error: Failed to install react-native-quick-crypto: React Native is not running on-device. QuickCrypto can only be used when synchronous method invocations (JSI) are possible. If you are using a remote debugger (e.g. Chrome), switch to an on-device debugger (e.g. Flipper) instead.
- (NOBRIDGE) ERROR  TypeError: Cannot read property 'install' of undefined
-```
+Again, text is indented 4 spaces. (Put a blank line between each
+term/definition pair to spread things out more.)
 
-- This is a know issue: [Error: Failed to install react-native-quick-crypto: React Native is not running on-device. · Issue #333 · margelo/react-native-quick-crypto · GitHub](https://github.com/margelo/react-native-quick-crypto/issues/333)
+Here's a "line block":
 
-For now, you have to edit:
+| Line one
+|   Line too
+| Line tree
 
-- `lib/module/NativeQuickCrypto/NativeQuickCrypto.js`
+and images can be specified like so:
 
-And comment them out:
+![example image](example-image.jpg "An exemplary image")
 
-```
-  // Check if we are running on-device (JSI)
-  // if (global.nativeCallSyncHook == null || QuickCryptoModule.install == null) {
-  //   throw new Error('Failed to install react-native-quick-crypto: React Native is not running on-device. QuickCrypto can only be used when synchronous method invocations (JSI) are possible. If you are using a remote debugger (e.g. Chrome), switch to an on-device debugger (e.g. Flipper) instead.');
-  // }
-```
+Inline math equations go in like so: $\omega = d\phi / dt$. Display
+math should get its own line and be put in in double-dollarsigns:
+
+$$I = \int \rho R^{2} dV$$
+
+And note that you can backslash-escape any punctuation characters
+which you wish to be displayed literally, ex.: \`foo\`, \*bar\*, etc.
