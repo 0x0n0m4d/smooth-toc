@@ -31,7 +31,7 @@ export const MarkdownOutlineView = () => {
                   {...heading}
                   key={heading.id}
                   level={heading.level - minimumLevel}
-                  active={true}
+                  active={heading.isVisible}
                 />
               );
             })}
