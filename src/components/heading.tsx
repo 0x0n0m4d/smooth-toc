@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useTocStore } from '@/stores/toc';
 
 type Props = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLHeadingElement>,
